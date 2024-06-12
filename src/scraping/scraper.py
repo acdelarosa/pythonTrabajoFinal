@@ -22,7 +22,7 @@ def parse_product(product):
         "title":title,
         "description":description,
         "price":price,
-    }
+        }
 
 def scrape(url):
     page_content=fetch_page(url)
@@ -31,7 +31,7 @@ def scrape(url):
     products_data=[]
     for product in products:
         product_info=parse_product(product)
-        products_data.append(product_info) ## print(products_data)
+        products_data.append(product_info) 
     return pd.DataFrame(products_data)
 
 

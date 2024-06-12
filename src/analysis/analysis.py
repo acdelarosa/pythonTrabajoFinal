@@ -1,1 +1,47 @@
 import pandas as pd
+import os
+from ..decorators.decorators import timeit, logit 
+
+@logit
+def load_data(data_path):
+    if data_path.endswith(".csv"):
+        df=pd.read_csv(data_path)
+    elif data_path.endswith(".xlsx"):
+        df=pd.read_excel(data_path)
+    else:
+        raise ValueError("Unsupported file format")
+    print("Data loaded successfully")
+    return df
+##print(load_data('data/raw/products.csv'))
+
+
+def clean_data(df):
+    df["price"]=df["price"].replace(r"[\$,]", "", regex=True).astype(float)
+    print("Data cleaned successfully")
+    return df
+
+def analyze_data(df):
+    print("Basic Data Analysis")
+    print(df.describe())
+    print("\nProducts with highest prices: ")
+    highestPrice=df.nlargest(5,"price")
+    print(highestPrice)
+    return highestPrice
+
+def save_clean_data(df,output_path):
+    if output_path.endswith(".csv"):
+        df.to_csv(output_path, index=False)
+    elif output_path.endswith(".xlsx"):
+        df.to_xlsx(output_path, index=False)
+    else:
+        raise ValueError("Unsupported file format")
+print(f"Clean data saved to {"output_path"}")
+
+if __name__ == "__main__":
+    data_path= "data/raw/products.csv"
+    output_path= "data/processed/cleaned_products.csv"
+    df = load_data(data_path)
+    df=clean_data(df)
+    df = analyze_data(df)
+    os.makedirs("data/processed", exist_ok=True)
+    save_clean_data(df, output_path)
