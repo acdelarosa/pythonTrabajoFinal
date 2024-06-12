@@ -3,6 +3,7 @@ import os
 from ..decorators.decorators import timeit, logit 
 
 @logit
+@timeit
 def load_data(data_path):
     if data_path.endswith(".csv"):
         df=pd.read_csv(data_path)
@@ -14,12 +15,15 @@ def load_data(data_path):
     return df
 ##print(load_data('data/raw/products.csv'))
 
-
+@logit
+@timeit
 def clean_data(df):
     df["price"]=df["price"].replace(r"[\$,]", "", regex=True).astype(float)
     print("Data cleaned successfully")
     return df
 
+@logit
+@timeit
 def analyze_data(df):
     print("Basic Data Analysis")
     print(df.describe())
@@ -28,6 +32,9 @@ def analyze_data(df):
     print(highestPrice)
     return highestPrice
 
+
+@logit
+@timeit
 def save_clean_data(df,output_path):
     if output_path.endswith(".csv"):
         df.to_csv(output_path, index=False)
